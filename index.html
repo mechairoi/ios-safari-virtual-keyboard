@@ -1,1 +1,251 @@
-<h1>Hello!</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, interactive-widget=resizes-content, maximum-scale=1"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Safari Virtual Keyboard Demo</title>
+    <style>
+      body {
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+      }
+      body.virtual-keyboard-shown {
+        margin-top: var(--visual-viewport-offset-top, 0px);
+      }
+      #root {
+        width: 100vw;
+        height: calc(100 * var(--svh, 1svh));
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .virtual-keyboard-shown #root,
+      #root:has(input:focus),
+      #root:has([contenteditable="true"]:focus) {
+        overscroll-behavior-y: contain;
+      }
+      header {
+        position: sticky;
+        top: 0;
+      }
+      footer {
+        position: sticky;
+        bottom: 0;
+      }
+      #editor {
+        min-height: calc(100 * var(--svh, 1svh) - 96px);
+        font-size: 24px;
+      }
+      #editor:has(:focus),
+      .virtual-keyboard-shown #editor {
+        min-height: calc(100 * var(--svh, 1svh) - 96px + 1px);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      button {
+        font-size: 16px;
+        padding: 8px;
+        appearance: none;
+      }
+      header,
+      footer {
+        display: flex;
+        align-items: center;
+        justify-content: stretch;
+        height: 48px;
+        width: 100%;
+        background-color: lightgray;
+      }
+      footer > button {
+        height: 100%;
+        flex: 1;
+      }
+      dialog {
+        border-style: none;
+        background-color: black;
+      }
+      #stickyDialog {
+        position: sticky;
+        bottom: 48px;
+        width: 100%;
+      }
+      #fixedDialog {
+        inset: 0;
+        top: var(--visual-viewport-offset-top, 0px);
+        bottom: calc(
+          100svh - var(--visual-viewport-offset-top, 0px) - var(--svh, 1svh) *
+            100
+        );
+        position: fixed;
+        margin: auto;
+        height: 150px;
+        width: 70svw;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        overscroll-behavior-y: contain;
+      }
+      #fixedDialog > div {
+        min-height: 151px;
+        display: flex;
+        flex-direction: column;
+      }
+      h1 {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="scrollable">
+      <header id="header"><h1>Safari Virtual Keyboard Demo</h1></header>
+      <main>
+        <div id="editor" contenteditable="true">
+          <p style="color: darkred">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p style="color: darkgoldenrod">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p style="color: darkolivegreen">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p style="color: darkslateblue">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
+      </main>
+      <dialog id="stickyDialog">
+        <input placeholder="https://..." />
+        <button id="stickyCloseButton" type="button">Close</button>
+      </dialog>
+      <footer id="footer">
+        <button id="stickyButton" type="button">Sticky</button>
+        <button id="fixedButton" type="button">Fixed</button>
+        <button id="clearButton">Clear</button>
+      </footer>
+      <dialog id="fixedDialog" class="scrollable">
+        <div>
+          <button id="fixedCloseButton" type="button">Close</button>
+          <button type="button">1</button>
+          <button type="button">2</button>
+          <button type="button">3</button>
+          <button type="button">4</button>
+        </div>
+      </dialog>
+    </div>
+  </body>
+
+  <script>
+    (() => {
+      const stickyButton = document.getElementById("stickyButton");
+      const stickyCloseButton = document.getElementById("stickyCloseButton");
+      const stickyDialog = document.getElementById("stickyDialog");
+      stickyButton.addEventListener("click", () => {
+        stickyDialog.show();
+      });
+      stickyButton.addEventListener("mousedown", (e) => {e.preventDefault()});
+      stickyCloseButton.addEventListener("click", () => {
+        stickyDialog.close();
+      });
+
+      const fixedButton = document.getElementById("fixedButton");
+      const fixedCloseButton = document.getElementById("fixedCloseButton");
+      const fixedDialog = document.getElementById("fixedDialog");
+      fixedButton.addEventListener("mousedown", (e) => {e.preventDefault()});
+      fixedButton.addEventListener("click", () => {
+        fixedDialog.show();
+      });
+      fixedCloseButton.addEventListener("click", () => {
+        fixedDialog.close();
+      });
+
+      const clearButton = document.getElementById("clearButton");
+      const editorElem = document.getElementById("editor");
+      clearButton.addEventListener("mousedown", (e) => {e.preventDefault()});
+      clearButton.addEventListener('click', () => {
+        editorElem.innerHTML = '';
+      });
+    })();
+
+    (() => {
+      const ua = window.navigator.userAgent;
+      const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+      if (!iOS) return;
+      if (!self.visualViewport) return;
+      let prevHeight = undefined;
+      let prevOffsetTop = undefined;
+      let timerId = undefined;
+      const scrollElem = document.getElementById("root");
+      function handleResize(e) {
+        const height = self.visualViewport.height * self.visualViewport.scale;
+        if (prevHeight !== height) {
+          prevHeight = height;
+          requestAnimationFrame(() => {
+            document.documentElement.style.setProperty(
+              "--svh",
+              height * 0.01 + "px"
+            );
+          });
+        }
+        if (prevOffsetTop !== self.visualViewport.offsetTop) {
+          if (prevOffsetTop === undefined) {
+            prevOffsetTop = self.visualViewport.offsetTop;
+          } else {
+            const scrollOffset = self.visualViewport.offsetTop - prevOffsetTop;
+            prevOffsetTop = self.visualViewport.offsetTop;
+            requestAnimationFrame(() => {
+              if (e && e.type === "resize") {
+                scrollElem.scrollBy(0, scrollOffset);
+              }
+              document.documentElement.style.setProperty(
+                "--visual-viewport-offset-top",
+                self.visualViewport.offsetTop + "px"
+              );
+            });
+          }
+        }
+        if (height + 10 < document.documentElement.clientHeight) {
+          document.body.classList.add("virtual-keyboard-shown");
+        } else {
+          document.body.classList.remove("virtual-keyboard-shown");
+        }
+      }
+      handleResize();
+      self.visualViewport.addEventListener("resize", handleResize);
+      self.visualViewport.addEventListener("scroll", handleResize);
+    })();
+  </script>
+</html>
